@@ -23,7 +23,6 @@ def create_app(test_config=False):
         @app.route('/shorten_url', methods=['POST'])
         def shorten_url():
             payload = request.form.to_dict()
-            print(payload)
             from tier_app.shorten_url import get_or_create_shortened_url
             response = get_or_create_shortened_url(payload['long_url'])
             message = f"Your new shorter Url tier.app/{response.new_url}  "
