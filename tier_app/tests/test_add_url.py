@@ -1,5 +1,4 @@
 import pytest
-from tier_app import create_app
 from tier_app.models import Url
 
 

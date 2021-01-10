@@ -1,5 +1,6 @@
 import random, string
-from tier_app.models import Url, db
+from tier_app.models import Url
+from tier_app.db import db_session
 
 def get_or_create_shortened_url(url):
     if url and isinstance(url, str):
@@ -12,8 +13,8 @@ def get_or_create_shortened_url(url):
             # This will be the code used to find the stored Url and redirect
             unique_id = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(7))
             new_url = Url(url, unique_id)
-            db.session.add(new_url)
-            db.session.commit()
+            db_session.add(new_url)
+            db_session.commit()
             return new_url
 
 def get_original_url(short_url_code):

@@ -3,7 +3,7 @@ import os
 from flask import Flask, request, jsonify, flash, redirect
 from flask_sqlalchemy import SQLAlchemy
 
-db = SQLAlchemy()
+#db = SQLAlchemy()
 
 def create_app(test_config=False):
     # create and configure the app
@@ -14,11 +14,12 @@ def create_app(test_config=False):
     else:
         app.config.from_object("config.ConfigTesting")
 
-
-    db.init_app(app)
+    from tier_app.db import init_db
+    init_db()
+    #db.init_app(app)
 
     with app.app_context():
-        db.create_all()
+        #db.create_all()
 
         @app.route('/shorten_url', methods=['POST'])
         def shorten_url():
@@ -39,5 +40,10 @@ def create_app(test_config=False):
             else:
                 flash("An Error Occured", category='error')
                 return 'Either No Url was found with that code  or The Url Code is too short or wrong so take another look :('
+
+    from tier_app.db import db_session
+    @app.teardown_appcontext
+    def shutdown_session(exception=None):
+        db_session.remove()
     
-        return app
+    return app
